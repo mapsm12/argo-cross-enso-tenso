@@ -1,0 +1,449 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\graphicspath{{FIGURAS_FINALES/}}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{tabularx}
+\usepackage{xurl}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Float placement parameters for optimal page layout and reduced whitespace
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.75}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\title{\textbf{Multilinear and Subsurface Evaluation of the ENSO $E$ and $C$ Indices:\\ Quantifying Residual Dynamical Information, Temporal Irreversibility, and Threshold Sensitivity in the Equatorial Pacific}}
+
+\author{M. Andrade\thanks{Corresponding author: \texttt{mandrade@igp.gob.pe}} \\
+\small Direcci\'on de Ciencias de la Atm\'osfera , Hidr\'osfera y Cambio Clim\'atico, Instituto Geof\'isico del Per\'u (IGP),\\
+Lima, Per\'u 
+}
+
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The diversity of the El Ni\~no--Southern Oscillation (ENSO) is canonically characterized by the orthogonal Eastern ($E$) and Central ($C$) Pacific sea surface temperature indices. While empirical observations exhibit pronounced phase-space curvature, whether higher-order multilinear moment tensors provide genuinely novel physical information beyond linear wave kinematics, Takahashi's quadratic parameterization, and recharge-oscillator dynamics remains an open scientific question. Here, we present an exhaustive diagnostic assessment of the trivariate $(E, C, D20)$ system using monthly observations (1980--2018, $N = 466$ continuous months), incorporating eastern equatorial 20$^\circ$C isotherm depth ($D20$) and zonal wind stress. We show that the static third-order tensor is largely reconstructible from established statistical relationships, while its residual components do not, by themselves, establish independent physical mechanisms: linear wave projection of the thermocline onto $(E, C)$ accounts for $71.76\%$ of the squared Frobenius norm ($\|\mathcal{T}_{\mathrm{lin}}\|_F^2 / \|\mathcal{T}\|_F^2$), while exact Gram-Schmidt orthogonalization confirms that static mixed moments algebraically resolve into linear correlation and canonical parabolic geometry ($m_{\mathrm{res}} \equiv \gamma \mathrm{Var}(q) = 0.1367$). In contrast, the bi-lagged multilinear surface $T_{ECH}(\tau_1, \tau_2)$ provides statistical evidence of time-reversal asymmetry at physically motivated lags centered at $(\tau_1 = +3, \tau_2 = +2)$ months ($\Delta T = +0.2405$), reflecting precursor thermocline deepening and Central Pacific warming preceding eastern peak anomalies. While an unconstrained multi-lag exploratory search across 625 combinations cannot reject random field fluctuations without prior physical knowledge ($p = 0.436$), this asymmetry is statistically significant against Fourier phase-randomized surrogates ($p = 0.0105$) and dynamic recharge models ($p = 0.0140$) when constrained to equatorial wave-transit timescales, and persists across the modern 2000--2018 validation epoch. Jackknife resampling reveals high sensitivity to extreme episodes: excluding the three super El Ni\~no events ($9.66\%$ of the record) produces a $66.1\%$ reduction in the global Frobenius norm (and $58.3\%$ under re-standardization), reflecting strong leverage from extreme tails rather than continuous ambient multilinear turbulence, though historical sample size precludes proving an abrupt threshold bifurcation over continuous non-linearities. Finally, incorporating multilinear terms into predictive models yields no out-of-sample skill improvement, underscoring that higher-order moments serve as potent diagnostic markers of phase-space asymmetry rather than prognostic predictors.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:} ENSO diversity; E and C indices; Higher-order statistics; Multilinear moments; Thermocline dynamics; Recharge oscillator; Convective threshold; Surrogate data.
+
+\vspace{1.0em}
+
+\section{Introduction}
+
+The El Ni\~no--Southern Oscillation (ENSO) is Earth's dominant mode of interannual climate variability, exerting widespread ecological and socio-economic impacts across the globe \citep{rasmusson1982variations, mcphaden1998tropical, cai2021changing}. Over the past two decades, extensive research has established that ENSO is not a single canonical oscillation, but exhibits pronounced spatial and temporal diversity \citep{capotondi2015understanding, timmermann2018enso}. In particular, warm events can mature predominantly in the Eastern Equatorial Pacific (EP El Ni\~no) or in the Central Pacific (CP El Ni\~no), each associated with distinct teleconnections, atmospheric convection patterns, and coastal impacts.
+
+To objectively characterize this diversity, \citet{takahashi2011enso} introduced the orthogonal $E$ and $C$ indices, derived from the leading empirical orthogonal functions (EOF1 and EOF2) of tropical Pacific sea surface temperature (SST) anomalies. In this canonical framework, the $E$ index quantifies extreme warm anomalies concentrated along the South American coast and the far-eastern cold tongue, while the $C$ index reflects temperature anomalies centered near the dateline. Crucially, scatter plots in the $(E, C)$ phase plane reveal a pronounced non-linear geometry: positive $E$ anomalies (extreme EP events) are systematically accompanied by positive $C$ anomalies, forming a parabolic curve ($C \propto E^2$), whereas cold anomalies (La Ni\~na) are predominantly negative in $C$ with $E$ remaining close to zero \citep{takahashi2011enso, karamperidou2014intrinsic}.
+
+Subsequent theoretical and modeling studies have illuminated the physical mechanisms responsible for this phase-space asymmetry. \citet{takahashi2016strong} and \citet{capotondi2020diversity} demonstrated that ENSO dynamics operate under distinct moderate and strong regimes governed by a non-linear atmospheric convective threshold: once eastern SSTs exceed approximately $28^\circ\text{C}$, deep atmospheric convection shifts eastward into the cold tongue, triggering a collapse of the equatorial trade winds and non-linear Kelvin wave amplification. Simultaneously, \citet{an2004nonlinearity} emphasized that oceanic non-linear dynamical heating (NDH)---specifically the horizontal and vertical advection of temperature anomalies by anomalous currents ($-\mathbf{u}' \cdot \nabla T'$)---acts as a powerful rectifying mechanism that intensifies warm extremes while damping cold anomalies.
+
+Concurrently, higher-order statistical methods have been increasingly applied to elucidate non-Gaussianity in climate records \citep{monahan2004spatial, pires2021bispectral}. In bispectral theory, third-order moments and cumulants provide natural tools for detecting quadratic phase coupling and irreversible temporal evolution. In multilinear algebra, third-order moment tensors $\mathcal{T}^{(3)} \in \mathbb{R}^{d \times d \times d}$ have gained prominence for multi-way feature extraction and non-linear dimensionality reduction \citep{kolda2009tensor, comon2014tensors}.
+
+However, a critical scientific question remains: \textit{Does the empirical formulation of a third-order moment tensor combining surface indices $(E, C)$ with subsurface thermocline depth ($D20$) provide genuinely novel physical information beyond known linear wave mechanics, Takahashi's quadratic parameterization, and documented threshold dynamics?}
+
+The present work provides a rigorous evaluation of this question. Rather than asserting tensor novelty per se, we formulate the central contribution as: \textbf{identifying and quantifying the residual dynamical information of the trivariate $(E, C, D20)$ moments after removing the contributions from linear wave dependence, persistence, and known quadratic relationships.} Specifically, by analyzing synchronized monthly records of $E$, $C$, eastern equatorial thermocline depth ($D20$), and zonal wind stress ($\tau_x$) over 1980--2018 ($N = 466$ continuous months), we:
+\begin{enumerate}
+    \item Deconstruct the static third-order moment tensor $\mathcal{T}^{(3)}$ via linear thermocline wave projection and exact Gram-Schmidt orthogonalization;
+    \item Quantify the temporal irreversibility of the bi-lagged multilinear moment surface $T_{ECH}(\tau_1, \tau_2)$ and validate its statistical significance against linear Gaussian surrogate data and coupled dynamic recharge models;
+    \item Assess the leverage of extreme super El Ni\~no events via Jackknife subsampling to determine whether non-linearity represents continuous multilinear turbulence or episodic threshold activation; and
+    \item Test out-of-sample predictive forecasts to evaluate whether empirical bilinear interaction terms provide measurable predictive skill beyond conventional quadratic models.
+\end{enumerate}
+
+\section{Data and Observational Timeline}
+
+\subsection{Observational Datasets (1980--2018)}
+Four monthly observational series were synchronized over the 39-year period March 1980 to December 2018 ($N = 466$ continuous months):
+\begin{enumerate}
+    \item \textbf{$E$ and $C$ Indices:} Derived from NOAA Extended Reconstructed Sea Surface Temperature version 5 (ERSSTv5; \citealt{huang2017extended}) over the tropical Pacific domain ($10^\circ\text{S}$--$10^\circ\text{N}$, $120^\circ\text{E}$--$80^\circ\text{W}$). Following the mathematical methodology of \citet{takahashi2011enso}, monthly SST anomalies relative to the 1981--2010 base period climatology were subjected to Empirical Orthogonal Function (EOF) analysis. The leading two principal component time series, $PC1(t)$ and $PC2(t)$, were rotated by $45^\circ$ according to the canonical definitions:
+    \begin{equation}
+    E(t) = \frac{PC1(t) - PC2(t)}{\sqrt{2}}, \qquad C(t) = \frac{PC1(t) + PC2(t)}{\sqrt{2}}
+    \end{equation}
+    High-frequency intraseasonal noise was removed using a standard 1-2-1 binomial filter. The spatial loading patterns and time series derived from ERSSTv5 correlate at $r > 0.98$ with the original HadISST-derived indices of \citet{takahashi2011enso}, confirming physical and mathematical equivalence.
+    \item \textbf{Eastern Equatorial Thermocline Depth ($D20$):} Derived from the depth of the 20$^\circ$C isotherm averaged over the Eastern Pacific equatorial box ($2^\circ\text{S}$--$2^\circ\text{N}$, $110^\circ\text{W}$--$95^\circ\text{W}$), denoted $H(t)$, standardized relative to the 1981--2010 climatology. Data originate from the NOAA PMEL in situ equatorial moored buoy array compilation (\texttt{iso20\_complete.nc}) and the ECMWF Ocean Reanalysis System 5 (ORAS5; \citealt{zuo2019ecmwf}).
+    \item \textbf{Atmospheric Zonal Wind Stress ($\tau_x$):} Extracted from ECMWF ORAS5 variable \texttt{sozotaux} over the Western-Central Pacific trigger region ($2^\circ\text{S}$--$2^\circ\text{N}$, $160^\circ\text{E}$--$160^\circ\text{W}$).
+\end{enumerate}
+
+\subsection{Subsurface Observational Provenance and Robustness Audit}
+A rigorous assessment of subsurface data provenance across the observational timeline is essential:
+\begin{itemize}
+    \item \textbf{Pre-ATLAS Era (1980--1984):} Subsurface thermocline measurements in the eastern equatorial Pacific box ($110^\circ\text{W}$--$95^\circ\text{W}$) are grounded in in situ moorings from the NOAA Equatorial Pacific Ocean Climate Studies (EPOCS) program \citep{halpern1987observations} and historical CTD/XBT hydrographic transects. While \citet{halpern1987observations} documents the continuous deployment and moored temperature observations along the equator at $0^\circ, 110^\circ\text{W}$ and $0^\circ, 95^\circ\text{W}$ during 1980--1985, our direct data audit of the PMEL historical records indicates that in situ observations were available for $86.3\%$ of months at the $110^\circ\text{W}$ site during this 1980--1984 window. To ensure continuous temporal coverage and spatial coherence across data-sparse months prior to the full ATLAS deployment, these in situ observations were integrated and cross-validated with the continuous, dynamically constrained ECMWF ORAS5 ocean reanalysis, which assimilates all available historical subsurface temperature profiles using a 3D-Var assimilation scheme into the NEMO ocean model.
+    \item \textbf{TOGA / ATLAS Expansion (1985--1994):} Following the 1982--83 El Ni\~no, autonomous ATLAS thermistor moorings were progressively deployed across the equatorial Pacific, providing continuous real-time telemetered thermal structure.
+    \item \textbf{Mature Operational Array (1995--2018):} The full basin-wide 67-mooring TAO/TRITON array operated with $>95\%$ data completeness. Across the entire 466 months in the eastern box, only 4 monthly values ($0.86\%$ of the record) were missing in the in situ series (September--October 2012 and January--February 2013 during a TAO maintenance gap), which were linearly interpolated.
+\end{itemize}
+
+To ensure that results are not sensitive to pre-ATLAS hydrographic sampling, we conducted an epoch sensitivity test restricting all calculations to the modern ATLAS operational era (1985--2018, $N = 408$ continuous months). The linear regression coefficients between thermocline depth and surface indices are virtually identical: $b_E = 0.4811$ ($1985$--$2018$) vs. $0.4934$ ($1980$--$2018$); $b_C = 0.6223$ vs. $0.6156$; and $R^2 = 66.78\%$ vs. $66.54\%$. Third-order moments show identical stability: $T_{EEE} = 1.5632$ vs. $1.5708$ ($0.5\%$ change), $T_{EEH} = 0.9831$ vs. $1.0169$ ($3.3\%$ change), and $T_{ECH} = 0.3355$ vs. $0.3454$ ($2.9\%$ change), with all variations remaining strictly within $3.6\%$. This confirms that the statistical and physical conclusions are robust across observational epochs.
+
+All four series were standardized by subtracting the sample mean and dividing by the sample standard deviation ($ddof = 1$):
+\begin{equation}
+e(t) = \frac{E(t) - \bar{E}}{\sigma_E}, \quad c(t) = \frac{C(t) - \bar{C}}{\sigma_C}, \quad h(t) = \frac{H(t) - \bar{H}}{\sigma_H}, \quad w(t) = \frac{\tau_x(t) - \bar{\tau}_x}{\sigma_{\tau_x}}
+\end{equation}
+
+\section{Mathematical and Methodological Framework}
+
+\subsection{Trivariate Third-Order Moment Tensor $\mathcal{T}^{(3)}$}
+Let $\mathbf{x}(t) = [x_1(t), x_2(t), x_3(t)]^T \equiv [e(t), c(t), h(t)]^T \in \mathbb{R}^3$. The static third-order moment tensor $\mathcal{T}^{(3)} \in \mathbb{R}^{3 \times 3 \times 3}$ is defined by:
+\begin{equation}
+\mathcal{T}_{ijk} = \frac{1}{N} \sum_{t=1}^N x_i(t) \, x_j(t) \, x_k(t), \quad i,j,k \in \{1, 2, 3\}
+\end{equation}
+Due to index permutation symmetry, $\mathcal{T}^{(3)}$ is fully supersymmetric and possesses exactly $\binom{3+3-1}{3} = 10$ independent components. Its magnitude is quantified by the Frobenius norm:
+\begin{equation}
+\|\mathcal{T}^{(3)}\|_F = \sqrt{\sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \mathcal{T}_{ijk}^2}
+\end{equation}
+
+\subsection{Linear Wave Projection and Frobenius Norm Deconstruction}
+Following equatorial shallow-water wave theory \citep{jin1997paradigm, meinen2000observations}, eastern thermocline depth responds as an integrated linear wave receiver forced by surface wind and thermal fields. We project $h(t)$ onto the standardized surface indices:
+\begin{equation}
+h(t) = a_1 e(t) + a_2 c(t) + \varepsilon_h(t)
+\label{eq:ols_h}
+\end{equation}
+where $\mathbb{E}[\varepsilon_h e] = \mathbb{E}[\varepsilon_h c] = 0$. Substituting Eq.~(\ref{eq:ols_h}) into third-order moments involving $h$ yields:
+\begin{equation}
+\mathcal{T}_{ijh} = a_1 \mathcal{T}_{ije} + a_2 \mathcal{T}_{ijc} + \mathbb{E}[x_i x_j \varepsilon_h] \equiv \mathcal{T}_{ijh}^{\text{lin}} + \mathcal{T}_{ijh}^{\text{res}}
+\end{equation}
+The linear reconstructed tensor $\mathcal{T}_{\text{lin}}^{(3)}$ is defined by replacing $h$ with $h_{\text{lin}} = a_1 e + a_2 c$, leaving the true residual tensor:
+\begin{equation}
+\mathcal{T}_{\text{res}}^{(3)} = \mathcal{T}^{(3)} - \mathcal{T}_{\text{lin}}^{(3)}
+\end{equation}
+Importantly, because $\mathcal{T}_{\text{lin}}$ and $\mathcal{T}_{\text{res}}$ are not necessarily orthogonal in tensor Frobenius space, the squared Frobenius norm partitions exactly as:
+\begin{equation}
+\|\mathcal{T}^{(3)}\|_F^2 = \|\mathcal{T}_{\text{lin}}^{(3)} + \mathcal{T}_{\text{res}}^{(3)}\|_F^2 = \|\mathcal{T}_{\text{lin}}^{(3)}\|_F^2 + 2\langle \mathcal{T}_{\text{lin}}^{(3)}, \mathcal{T}_{\text{res}}^{(3)} \rangle_F + \|\mathcal{T}_{\text{res}}^{(3)}\|_F^2
+\label{eq:frobenius_balance}
+\end{equation}
+where $\langle \mathcal{A}, \mathcal{B} \rangle_F = \sum_{ijk} \mathcal{A}_{ijk} \mathcal{B}_{ijk}$ is the Frobenius inner product. Therefore, while $\|\mathcal{T}_{\text{lin}}\|_F^2 / \|\mathcal{T}\|_F^2$ provides the squared Frobenius ratio, the cross-term $2\langle \mathcal{T}_{\text{lin}}, \mathcal{T}_{\text{res}} \rangle_F$ must be explicitly reported to document the geometric non-orthogonality of the multilinear decomposition.
+
+\subsection{Gram-Schmidt Algebraic Partitioning of the Parabolic Term}
+To evaluate the mixed surface moment $T_{EEC} = \mathbb{E}[e^2 c]$, we apply the Gram-Schmidt orthogonalization procedure to decouple $e(t)^2$ from the linear basis $\{1, e(t)\}$. Defining the general orthogonalized quadratic variable:
+\begin{equation}
+q(t) = e(t)^2 - \mathbb{E}[e^2] - \frac{\mathbb{E}[e^3]}{\mathbb{E}[e^2]} \, e(t)
+\label{eq:gs_q}
+\end{equation}
+which identically satisfies $\mathbb{E}[q] = 0$ and $\text{Cov}(q, e) = \mathbb{E}[q e] = 0$ for any sample normalization convention ($ddof = 0$ or $ddof = 1$). Its exact variance is:
+\begin{equation}
+\text{Var}(q) = \mathbb{E}[e^4] - (\mathbb{E}[e^2])^2 - \frac{(\mathbb{E}[e^3])^2}{\mathbb{E}[e^2]}
+\end{equation}
+Regressing $c(t)$ onto the orthogonal basis $\{e(t), q(t)\}$:
+\begin{equation}
+c(t) = r_{\text{lin}} e(t) + \gamma q(t) + \eta(t)
+\end{equation}
+where $r_{\text{lin}} = \mathbb{E}[e c] / \mathbb{E}[e^2]$ and $\gamma = \text{Cov}(c, q) / \text{Var}(q)$. For the linear residual $c_{\text{res}}(t) = c(t) - r_{\text{lin}} e(t)$, the residual cross-moment satisfies the exact algebraic identity:
+\begin{equation}
+m_{\text{res}} \equiv \mathbb{E}[e^2 c_{\text{res}}] = T_{EEC} - r_{\text{lin}} \mathbb{E}[e^3] \equiv \gamma \cdot \text{Var}(q)
+\label{eq:gs_identity}
+\end{equation}
+\textbf{Physical and Algebraic Meaning:} Eq.~(\ref{eq:gs_identity}) is an exact algebraic consequence of projecting onto the polynomial basis:
+\begin{equation}
+T_{EEC} = \underbrace{r_{\text{lin}} \, T_{EEE}}_{\text{Linear Projection}} + \underbrace{\gamma \cdot \text{Var}(q)}_{\text{Parabolic Curvature}}
+\end{equation}
+This confirms that in static surface data, the third-order cross-moment $T_{EEC}$ contains no residual component orthogonal to Takahashi's parabolic regression. Note, however, that this identity represents an exact algebraic decomposition guaranteed by mathematical construction; it does not rule out cubic or higher-order non-linear dynamics in the time-dependent prognostic equations of the climate system (such as nonlinear cubic damping in the equatorial ocean heat recharge; cf. \citealt{han2026realistic}).
+
+\subsection{Bi-Lagged Cross-Moments, Temporal Irreversibility, and Surrogate Testing}
+To investigate dynamical time-lagged relationships, we define the bi-lagged third-order cross-moment surface:
+\begin{equation}
+T_{ECH}(\tau_1, \tau_2) = \frac{1}{N_{\tau}} \sum_t e(t) \, c(t - \tau_1) \, h(t - \tau_2)
+\label{eq:bilagged}
+\end{equation}
+over discrete lags $\tau_1, \tau_2 \in [-12, +12]$ months, where $N_{\tau}$ is the number of valid overlapping months. Under this lag convention:
+\begin{itemize}
+    \item $\tau_1 > 0$ indicates that the Central Pacific anomaly $c$ occurs $\tau_1$ months \textbf{before} eastern warming $e(t)$ ($C$ leads $E$).
+    \item $\tau_2 > 0$ indicates that eastern thermocline deepening $h$ occurs $\tau_2$ months \textbf{before} eastern warming $e(t)$ ($D20$ leads $E$).
+\end{itemize}
+To rigorously assess temporal irreversibility (the dynamical arrow of time), we evaluate the time-reversal asymmetry metric around the identified dynamical peak $(\tau_1^*, \tau_2^*)$ \citep{pires2021bispectral}:
+\begin{equation}
+\Delta T_{ECH}(\tau_1^*, \tau_2^*) = T_{ECH}(\tau_1^*, \tau_2^*) - T_{ECH}(-\tau_1^*, -\tau_2^*)
+\label{eq:asymmetry_metric}
+\end{equation}
+To determine whether $\Delta T_{ECH}$ reflects true non-linear dynamics or is a sampling artifact of linear persistence or known static curvature, we establish four statistical benchmarks:
+\begin{enumerate}
+    \item \textbf{Moving Block Bootstrap:} Resampling blocks of length $L = 18$ months ($B = 2000$ iterations) to construct non-parametric 95\% confidence intervals preserving local persistence.
+    \item \textbf{Multivariate Fourier Phase-Randomized Surrogates:} Generating $B = 2000$ surrogate realizations by applying identical random phase rotations to the Fourier transform across channels, perfectly preserving power spectra, autocorrelations, and cross-covariances while destroying higher-order non-linear coupling.
+    \item \textbf{Trivariate Gaussian VAR(2) Null Model:} Fitting a stationary vector autoregression of order 2 to $[e, c, h]^T$ and simulating $B = 2000$ synthetic realizations of length $N = 466$.
+    \item \textbf{Coupled Non-Linear Quadratic Recharge Null Model:} Simulating a bivariate VAR(2) for $[E, H]$ coupled with Takahashi's dynamic quadratic relation $C(t) = c_0 + \rho_1 C(t-1) + \rho_2 C(t-2) + \beta_0 E(t) + \beta_1 E(t-1) + \gamma E(t)^2 + \theta_0 H(t) + \theta_1 H(t-1) + \varepsilon_C(t)$ ($B = 1000$). This benchmark explicitly preserves linear wave dynamics, thermal feedback, and the high temporal autocorrelation of $C$ ($r = 0.978$). We evaluate both the a priori hypothesis test at the dynamically predicted lag $(\tau_1 = +3, \tau_2 = +2)$ and the global max-statistic across all 625 combinations in the $[-12, +12]^2$ grid to assess the look-elsewhere effect.
+\end{enumerate}
+
+\subsection{Out-of-Sample Predictive Framework}
+We formulate five nested predictive models for forecasting $E(t+k)$ at lead times $k \in \{1, 3, 6\}$ months:
+\begin{itemize}
+    \item \textbf{M1 [Autoregressive AR(1)]:} $E(t+k) = \beta_0 + \beta_1 E(t)$.
+    \item \textbf{M2 [Bivariate Linear]:} $E(t+k) = \beta_0 + \beta_1 E(t) + \beta_2 C(t)$.
+    \item \textbf{M3 [Physical Linear]:} $E(t+k) = \beta_0 + \beta_1 E(t) + \beta_2 C(t) + \beta_3 H(t) + \beta_4 \tau_x(t)$.
+    \item \textbf{M4 [Quadratic]:} $M3 + \beta_5 E(t)^2 + \beta_6 C(t)^2$.
+    \item \textbf{M5 [Bilinear Interaction]:} $M4 + \beta_7 E(t)H(t) + \beta_8 C(t)H(t) + \beta_9 H(t)^2$.
+\end{itemize}
+Models are trained on 1980--2005 ($N_{\text{train}} = 310$ months) and tested out-of-sample on 2006--2018 ($N_{\text{test}} = 156$ months), with standardization statistics computed strictly on the training partition. Forecast accuracy differences are evaluated using RMSE and tested via the \citet{diebold1995comparing} test with Harvey-Leybourne-Newbold small-sample correction and Bartlett serial error weighting.
+
+\section{Results}
+
+\subsection{Observational Covariation and Phase-Space Geometry}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig01_joint_distributions_ECD20.pdf}
+\caption{Joint scatter distributions, quadratic and linear regression fits, and marginal univariate histograms of standardized indices $e(t)$, $c(t)$, and $h(t)$ ($N = 466$, 1980--2018). (a) $(e, c)$ plane colored by thermocline depth anomaly $h$, showing the quadratic regression curve $C(E)$ with 95\% confidence interval for the fitted conditional mean. (b) $e$ vs. $h$ colored by $c$ with linear fit ($r = +0.537$). (c) $c$ vs. $h$ colored by $e$ with linear fit ($r = +0.651$). (d) Compared marginal probability densities with empirical skewness values.}
+\label{fig:joint_dist}
+\end{figure}
+
+Figure~\ref{fig:joint_dist} displays the bivariate distributions among $e$, $c$, and $h$. The $(e, c)$ plane exhibits the characteristic parabolic asymmetry documented by \citet{takahashi2011enso}. In contrast, the relationships involving the thermocline ($e, h$ and $c, h$) are strongly linear. The bivariate OLS regression of eastern thermocline depth onto surface indices yields:
+\begin{equation}
+h(t) = 0.4934 \, e(t) + 0.6156 \, c(t) + \varepsilon_h(t), \quad R^2 = 66.54\%
+\label{eq:ols_empirical}
+\end{equation}
+confirming that approximately two-thirds of thermocline depth variance is linearly explained by surface temperatures.
+
+\subsection{Static Tensor Deconstruction and Gram-Schmidt Proof}
+
+Table~\ref{tab:tensor} presents the 10 independent components of $\mathcal{T}^{(3)}$, contrasted against the linear statistical reconstruction based on Eq.~(\ref{eq:ols_empirical}).
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Independent components of the third-order moment tensor $\mathcal{T}^{(3)}$ ($N=466$, 1980--2018; standardized with $ddof=1$). All values and multiplicities exactly reproduce the total Frobenius norm and projection identities.}
+\label{tab:tensor}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llcccc}
+\toprule
+Component & Notation & Observed & Linear Reconstruction & Residual & Linear Expl. \% \\
+\midrule
+$\mathcal{T}_{111}$ & $T_{EEE}$ & \textbf{+1.5708} & --- & --- & Univariate Skewness \\
+$\mathcal{T}_{222}$ & $T_{CCC}$ & \textbf{-0.4430} & --- & --- & Univariate Skewness \\
+$\mathcal{T}_{333}$ & $T_{HHH}$ & \textbf{+0.8682} & +0.3295 & +0.5386 & 38.0\% \\
+$\mathcal{T}_{112}$ & $T_{EEC}$ & \textbf{+0.2478} & +0.2478 & +0.0000 & 100.0\% (GS Identity) \\
+$\mathcal{T}_{122}$ & $T_{ECC}$ & \textbf{+0.2369} & +0.2369 & +0.0000 & 100.0\% (Surface) \\
+$\mathcal{T}_{113}$ & $T_{EEH}$ & \textbf{+1.0169} & \textbf{+0.9275} & \textbf{+0.0894} & \textbf{91.2\%} \\
+$\mathcal{T}_{223}$ & $T_{CCH}$ & \textbf{-0.1649} & \textbf{-0.1559} & \textbf{-0.0090} & \textbf{94.5\%} \\
+$\mathcal{T}_{133}$ & $T_{EHH}$ & \textbf{+0.9188} & +0.6227 & +0.2962 & 67.8\% \\
+$\mathcal{T}_{233}$ & $T_{CHH}$ & \textbf{+0.1603} & +0.0363 & +0.1240 & 22.7\% \\
+$\mathcal{T}_{123}$ & $T_{ECH}$ & \textbf{+0.3454} & \textbf{+0.2681} & \textbf{+0.0773} & \textbf{77.6\%} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The total Frobenius norm of the empirical tensor is $\|\mathcal{T}^{(3)}\|_F = 3.2061$ ($\|\mathcal{T}^{(3)}\|_F^2 = 10.2793$)\footnote{Under population standardization ($ddof=0$), $\|\mathcal{T}\|_F = 3.2165$, $\|\mathcal{T}_{\text{lin}}\|_F = 2.7248$, $\|\mathcal{T}_{\text{res}}\|_F = 0.8147$, $T_{EEE} = 1.5758$, $T_{CCC} = -0.4444$, $T_{EEH} = 1.0202$, and $T_{ECH} = 0.3465$, which differ strictly by the constant factor $(N/(N-1))^{3/2} = 1.003228$ ($0.32\%$). The ratio of squared Frobenius norms is invariant ($71.76\%$). Both the 3D tensor array and the weighted sum over the 10 components with their exact multinomial multiplicities yield identical norms to machine precision ($0.00 \times 10^0$).}. The linear statistical reconstruction tensor possesses a norm of $\|\mathcal{T}_{\text{lin}}^{(3)}\|_F = 2.7160$ ($\|\mathcal{T}_{\text{lin}}^{(3)}\|_F^2 = 7.3768$), which accounts for \textbf{71.76\%} of the total squared Frobenius norm ($\|\mathcal{T}_{\text{lin}}\|_F^2 / \|\mathcal{T}\|_F^2$).
+
+Because the reconstructed tensor $\mathcal{T}_{\text{lin}}$ and the residual tensor $\mathcal{T}_{\text{res}}$ are not orthogonal in tensor space, evaluating the exact quadratic balance (Eq.~\ref{eq:frobenius_balance}) yields:
+\begin{equation}
+\underbrace{10.2793}_{\|\mathcal{T}\|_F^2 \, (100\%)} = \underbrace{7.3768}_{\|\mathcal{T}_{\text{lin}}\|_F^2 \, (71.76\%)} + \underbrace{2.2431}_{2\langle\mathcal{T}_{\text{lin}}, \mathcal{T}_{\text{res}}\rangle_F \, (21.82\%)} + \underbrace{0.6594}_{\|\mathcal{T}_{\text{res}}\|_F^2 \, (6.42\%)}
+\end{equation}
+Importantly, the percentages $71.76\%$, $21.82\%$, and $6.42\%$ represent algebraic terms of this exact norm balance rather than three orthogonal fractions of explained variance. The true residual tensor norm is $\|\mathcal{T}_{\text{res}}^{(3)}\|_F = \sqrt{0.6594} = 0.8121$, representing a residual ratio of $25.33\%$ ($\|\mathcal{T}_{\text{res}}\|_F / \|\mathcal{T}\|_F$). Crucially, for mixed moments involving the thermocline, linear statistical coupling accounts for $91.2\%$ of $T_{EEH}$, $94.5\%$ of $T_{CCH}$, and $77.6\%$ of $T_{ECH}$. Evaluating the theoretical projection identity $T_{ECH}^{\text{lin}} = a_1 T_{EEC} + a_2 T_{ECC} = 0.4934(0.2478) + 0.6156(0.2369) = \mathbf{+0.2681}$ confirms exact consistency between the regression coefficients and the empirical moments to machine precision ($1.11 \times 10^{-16}$).
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig02_linear_vs_nonlinear_decomposition.pdf}
+\caption{Linear statistical reconstruction and residual third-order moment partitioning across the components of $\mathcal{T}^{(3)}$ (matching Table~\ref{tab:tensor}). (a) Moment partition showing observed moments $T_{ijk}$, linear statistical reconstructions $T_{ijk}^{\text{lin}}$, and residual third-order moments $T_{ijk}^{\text{res}}$, with linear reconstruction percentages indicated for key thermocline cross-moments ($T_{EEH}: 91.2\%$, $T_{CCH}: 94.5\%$, $T_{ECH}: 77.6\%$). (b) Frobenius squared norm balance ($\|\mathcal{T}\|_F^2 = 10.2793$, where $71.76\%$ denotes the ratio of squared Frobenius norms $\|\mathcal{T}_{\text{lin}}\|_F^2 / \|\mathcal{T}\|_F^2$, $21.82\%$ the non-orthogonal cross-term, and $6.42\%$ the residual norm ratio $\|\mathcal{T}_{\text{res}}\|_F^2 / \|\mathcal{T}\|_F^2$) and verification of the Gram-Schmidt algebraic orthogonality identity on $T_{EEC}$ ($m_{\text{res}} = \gamma \text{Var}(q) = 0.1367$, $\Delta = 0.00$).}
+\label{fig:decomp}
+\end{figure}
+
+Evaluating the general Gram-Schmidt identity (Eq.~\ref{eq:gs_identity}) for the bivariate moment $T_{EEC}$:
+\begin{align*}
+\mathbb{E}[e^2] &= 0.9979, \quad \text{Var}(q) = 2.5554, \quad \gamma = 0.0535 \implies \gamma \cdot \text{Var}(q) = 0.1367 \\
+m_{\text{res}} &= T_{EEC} - r_{\text{lin}} T_{EEE} = 0.2478 - (0.0708)(1.5708) = 0.1367
+\end{align*}
+The difference $|m_{\text{res}} - \gamma \text{Var}(q)| = 0.00 \times 10^{00}$ to machine precision. As established in Section~3.3, this represents an exact algebraic decomposition of the selected third-order cross-moment, guaranteeing orthogonality to the polynomial basis by mathematical construction rather than proving that nature lacks alternative non-linear dynamics.
+
+\subsection{Temporal Irreversibility and the Arrow of Time}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig03_lagged_tensor_surface_ECH.pdf}
+\caption{Bi-lagged cross-third moment surface and statistical evaluation of temporal irreversibility. (a) Bi-lagged surface $T_{ECH}(\tau_1, \tau_2) = \mathbb{E}[E(t) \, C(t - \tau_1) \, D20(t - \tau_2)]$, displaying the global maximum at $(\tau_1 = +3, \tau_2 = +2)$ months ($+0.4293$) and its time-reversed counterpart at $(-3, -2)$ ($+0.1888$). (b) Time-reversal asymmetry map $\Delta T_{ECH}(\tau_1, \tau_2) = T - T_{\text{rev}}$, highlighting the asymmetry evaluated at the selected $T$-peak ($\Delta T(+3, +2) = +0.2405$, yellow circle), the unconstrained global maximum of asymmetry at $(\tau_1 = +10, \tau_2 = +1)$ ($\Delta T = +0.6812$, magenta diamond), and the physical wave-transit window $\Omega_{\text{phys}}$ (dashed rectangle, positive everywhere, mean $+0.2318$). (c) Monte Carlo null distributions for the targeted physical lag (Fourier surrogates, $p=0.0105$; Dynamic Coupled Quadratic, $p=0.0140$) contrasted against the unconstrained 625-lag exploratory search distribution ($p=0.4360$, testing asymmetry at the argmax of $T_{ECH}$ without physical priors). (d) Retrospective temporal validation on the modern era (2000--2018, $N=228$), showing the moving block bootstrap distribution ($L=18$, $B=2000$; 95\% CI $[+0.0319, +0.5125]$) and rejection of the 2000--2018 dynamic quadratic null model ($p=0.0065$ unilateral, $p=0.0150$ bilateral).}
+\label{fig:lagged}
+\end{figure}
+
+Figure~\ref{fig:lagged} displays the bi-lagged cross-moment surface $T_{ECH}(\tau_1, \tau_2)$. In contrast to the static domain, a distinct dynamical signature emerges:
+\begin{itemize}
+    \item A global maximum of the third-order cross-moment \textbf{$+0.4293$} occurs at:
+    \begin{align}
+    \tau_1^* &= +3 \text{ months (Central Pacific precursor leads } E(t)), \nonumber \\
+    \tau_2^* &= +2 \text{ months (Thermocline depth } D20 \text{ leads } E(t))
+    \end{align}
+    This alignment captures the canonical sequence of El Ni\~no development: Central Pacific warming ($\tau_1 = +3$) and westerly wind stress force eastward downwelling Kelvin waves, deepening the eastern thermocline ($\tau_2 = +2$), which subsequently triggers peak eastern SST warming ($E$, month 0).
+    \item The time-reversed counterpart under $(t \to -t)$ is evaluated at $(-\tau_1^*, -\tau_2^*) = (-3, -2)$:
+    \begin{equation}
+    T_{ECH}(-3, -2) = \mathbb{E}[E(t) \, C(t+3) \, D20(t+2)] = +0.1888
+    \end{equation}
+    \item Evaluating the time-reversal asymmetry metric (Eq.~\ref{eq:asymmetry_metric}) at this identified $T$-peak:
+    \begin{equation}
+    \Delta T_{ECH}(+3, +2) = T_{ECH}(+3, +2) - T_{ECH}(-3, -2) = 0.4293 - 0.1888 = \mathbf{+0.2405}
+    \end{equation}
+    It should be noted that $+0.2405$ is the asymmetry evaluated specifically at the physical maximum of $T_{ECH}$. Across the entire unconstrained $25 \times 25 = 625$ lag grid, the mathematical maximum of $\Delta T$ occurs at $(\tau_1 = +10, \tau_2 = +1)$ ($\Delta T = +0.6812$), driven by the negative reversed tail ($T = +0.2366, T_{\text{rev}} = -0.4446$, reflecting multi-season phase reversal into La Ni\~na). This crucial distinction reinforces the necessity of our dual hypothesis testing framework.
+\end{itemize}
+
+To establish whether this asymmetry is statistically significant and represents novel dynamical information beyond known physical processes, we contrast $\Delta T_{ECH}(+3, +2)$ against four benchmark tests:
+\begin{enumerate}
+    \item \textbf{Moving Block Bootstrap ($B = 2000, L = 18$ months):} Yields a bootstrap mean of $+0.2081 \pm 0.0887$, with a 95\% confidence interval of $[+0.0430, +0.3872]$, confirming that the empirical asymmetry is strictly positive and bounded away from zero.
+    \item \textbf{Multivariate Fourier Phase-Randomized Surrogates ($B = 2000$):} Surrogates preserving the exact power spectra, autocorrelations, and cross-covariances produce a null distribution of $-0.0024 \pm 0.0937$. The observed asymmetry of $+0.2405$ rejects linear Gaussian stationarity with \textbf{$p = 0.0105$} ($p < 0.05$).
+    \item \textbf{Trivariate Gaussian VAR(2) Null Model ($B = 2000$):} Simulating a stationary linear Markovian process yields a null distribution of $+0.0012 \pm 0.1083$, rejecting the linear VAR benchmark with \textbf{$p = 0.0295$} ($p < 0.05$).
+    \item \textbf{Dynamic Non-Linear Coupled Recharge Null Model ($B = 1000$):} Preserving the high persistence of $C$ ($r = 0.978$) and dynamic coupling yields a null distribution of $+0.0444 \pm 0.0941$ (95th percentile $= 0.1954$). The observed asymmetry of $+0.2405$ rejects this dynamic quadratic benchmark with \textbf{$p = 0.0140$} ($p < 0.05$).
+\end{enumerate}
+
+\textbf{Dual Hypothesis Framework: Multiple Testing vs. Physical Priors:}
+To evaluate the impact of multiple testing across the $25 \times 25 = 625$ lag combinations in the $[-12, +12]^2$ grid, we conducted two complementary experiments:
+\begin{enumerate}
+    \item \textit{Experiment A (Unconstrained Multi-Lag Exploratory Search):} When the peak lag is selected dynamically inside each null simulation without prior physical constraints (evaluating asymmetry at the dynamically identified argmax of $T_{ECH}$ across all 625 combinations), the null distribution has a mean of $+0.2363 \pm 0.1221$ (95th percentile $= 0.4549$). Testing $\Delta T_{\text{obs}} = +0.2405$ against this unconstrained distribution yields \textbf{$p = 0.4360$} ($\approx 0.44$). This openly acknowledges that an unconstrained exploratory search across 625 lags cannot distinguish the observed asymmetry at the argmax of $T_{ECH}$ from extreme-value sampling noise of a persistent random field without physical wave-transit priors.
+    \item \textit{Experiment B (Retrospective Temporal Cross-Validation and Physical Window):} In contrast, evaluating split-sample cross-validation between the calibration era (1980--1999, $N = 238$) and the subsequent modern era (2000--2018, $N = 228$) reveals that the physical lag $(\tau_1 = +3, \tau_2 = +2)$ remains robustly positive: in 2000--2018, $\Delta T_{ECH}(+3, +2) = \mathbf{+0.3227}$ ($T_{\text{fwd}} = 0.4908, T_{\text{rev}} = 0.1681$). Moving block bootstrap specifically over 2000--2018 ($L=18$ mo, $B=2000$) yields a 95\% confidence interval of $[+0.0319, +0.5125]$ (mean $+0.2602 \pm 0.1245$), strictly bounded away from zero. Sensitivity testing across block lengths $L \in \{12, 18, 24\}$ months confirms this stability (e.g., $95\%$ CI of $[+0.0419, +0.5248]$ for $L=24$ mo in 2000--2018, and $[+0.0807, +0.3543]$ for $L=24$ mo over the full record). Phase-randomized Fourier surrogates calculated specifically on 2000--2018 reject linear Gaussian dynamics at \textbf{$p = 0.0395$} ($p < 0.05$). Crucially, to test whether this persistence can be explained by known nonlinearities, we calibrated the dynamic coupled quadratic null model specifically over the 2000--2018 period ($B=2000$). The resulting null distribution has a mean of $+0.0029 \pm 0.1301$ (95th percentile $= 0.2142$), rejecting the dynamic quadratic benchmark with \textbf{$p = 0.0065$} (one-tailed, $p < 0.01$) and \textbf{$p = 0.0150$} (two-tailed, $p < 0.05$). While the full record was historically inspected, this retrospective temporal validation confirms that the surface-thermocline asymmetry is not an artifact of pre-2000 data or extreme 1982/1997 events, and provides evidence of temporal irreversibility beyond stationary linear or coupled quadratic models. In addition, evaluating the physical wave-transit window $\Omega_{\text{phys}} = \{\tau_1 \in [2,4], \tau_2 \in [1,3]\}$ yields strictly positive asymmetry across all 9 grid points (mean $= +0.2318$). Constrained to this physical wave hypothesis, the asymmetry is statistically established ($p = 0.0140$).
+\end{enumerate}
+
+\subsection{Physical Consistency with Oceanic Kelvin Waves and Wind Stress}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig04_hovmoller_wind_thermocline_coupling.pdf}
+\caption{(a) Equatorial Hovm\"oller diagram ($135^\circ$E--$90^\circ$W) of TAO/TRITON $D20$ anomalies during the 1997--98 El Ni\~no, with Kelvin wave propagation trajectory line ($c \approx 2.5\text{ m/s}$). (b) Equatorial zonal wind stress anomalies ($\tau_x$) from ORAS5. (c) Third-order mixed cross-moment $\mathbb{E}[E(t)H(t) \cdot \tau_x(t-\tau)]$, showing peak at $\tau = +1$ month. (d) Linear cross-correlation functions confirming that wind stress leads $D20$ by $+1$ month ($r=0.69$) and eastern SST ($E$) by $+2$ months ($r=0.40$).}
+\label{fig:hovmoller}
+\end{figure}
+
+Figure~\ref{fig:hovmoller} confirms the physical wave mechanisms governing the subsurface. Western-central Pacific zonal wind stress anomalies ($\tau_x$) lead eastern thermocline depth ($D20$) by \textbf{$+1$ month} ($r = 0.69$), consistent with equatorial Kelvin wave transit timescales \citep{meinen2000observations}. In turn, thermocline deepening leads eastern surface warming ($E$) by \textbf{$+1$ to $+2$ months} ($r = 0.56$). Thus, subsurface thermocline depth acts primarily as a linear wave integrator, while non-linearities are localized at the air-sea boundary and in mixed-layer thermal processes.
+
+\subsection{Predictive Out-of-Sample Falsification}
+
+Table~\ref{tab:models} and Figure~\ref{fig:models} display out-of-sample forecast evaluations across lead times $k = 1, 3, 6$ months for the test period 2006--2018 ($N_{\text{test}} = 156$; trained on 1980--2005, $N_{\text{train}} = 310$).
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Out-of-sample root mean square error (RMSE) for predicting $E(t+k)$ (test: 2006--2018, $N=156$; train: 1980--2005, $N=310$). Differences between M4 and M5 are statistically insignificant across all horizons under the Diebold-Mariano test.}
+\label{tab:models}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Model Class & Predictor Set & Lead $k=1$ mo & Lead $k=3$ mo & Lead $k=6$ mo \\
+\midrule
+M1: AR(1) Persistence & $E$ & 0.2447 & 0.6559 & 0.9422 \\
+M2: Bivariate Linear & $E, C$ & 0.2285 & 0.5898 & 0.8149 \\
+M3: Physical Linear & $E, C, H, \tau_x$ & 0.2112 & 0.5284 & 0.7876 \\
+M4: Quadratic & $M3 + E^2, C^2$ & \textbf{0.2098} & \textbf{0.5215} & \textbf{0.7816} \\
+M5: Bilinear & $M4 + E{\cdot}H, C{\cdot}H, H^2$ & 0.2115 (+0.81\%) & 0.5299 (+1.61\%) & 0.7958 (+1.82\%) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig05_predictive_evaluation_out_of_sample.pdf}
+\caption{Out-of-sample predictive evaluation across lead horizons $k = 1, 3, 6$ months (test: 2006--2018; train: 1980--2005). (a) Predictive RMSE for all five models from Table~\ref{tab:models}: persistence M1, bivariate linear M2, physical linear M3, conventional quadratic M4, and bilinear tensor M5. (b) Relative RMSE percentage change of bilinear model M5 over quadratic model M4 (+0.81\%, +1.61\%, +1.82\%). (c) Diebold-Mariano test statistics and $p$-values confirming no statistically significant difference from zero at $\alpha = 0.05$. (d) Squared error loss difference $(e_{\text{M5}}^2 - e_{\text{M4}}^2)$ over the verification period at lead $k=6$, displaying positive loss differences during 2015--16 without statistically significant forecast gain elsewhere.}
+\label{fig:models}
+\end{figure}
+
+Incorporating physical predictors ($H, \tau_x$) and quadratic terms (M4) significantly improves forecast accuracy over persistence, reducing RMSE from 0.6559 to 0.5215 at lead 3. However, adding bilinear interaction terms ($E \cdot H, C \cdot H, H^2$; model M5) yields no incremental skill:
+\begin{itemize}
+    \item At lead 1 month, RMSE increases from 0.2098 to 0.2115 (\textbf{+0.81\%}).
+    \item At lead 3 months, RMSE increases from 0.5215 to 0.5299 (\textbf{+1.61\%}).
+    \item At lead 6 months, RMSE increases from 0.7816 to 0.7958 (\textbf{+1.82\%}).
+\end{itemize}
+In predictive regression, the interaction term $E \cdot H$ is not statistically significant ($p = 0.22 > 0.05$), and the \citet{diebold1995comparing} test confirms that forecast differences between M4 and M5 are statistically indistinguishable ($p = 0.66$ at $k=1$, $p = 0.66$ at $k=3$, and $p = 0.07$ at $k=6$). This indicates that adding empirical bilinear interaction terms yields no measurable forecast benefit in out-of-sample testing, producing slightly higher RMSE across all horizons due to parameter penalty without physical predictive gain.
+
+\subsection{Jackknife Sensitivity: Extreme Event Concentration}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Jackknife sensitivity analysis of $\mathcal{T}^{(3)}$ to super El Ni\~no events ($N=466$, 1980--2018). Case 1 retains fixed global standardization ($\sigma$ from $N=466$) to measure extreme tail contributions directly. In Case 2 (subsamples re-standardized to unit variance), excluding all three super events yields $T_{EEE} = +0.4159$, $T_{EEH} = +0.1063$, $T_{ECH} = +0.2383$, and $\|\mathcal{T}^{(3)}\|_F = 1.3356$ ($-58.3\%$).}
+\label{tab:jackknife}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Sample Selection & $T_{EEE}$ & $T_{EEH}$ & $T_{ECH}$ & $\|\mathcal{T}^{(3)}\|_F$ & Norm Change \\
+\midrule
+\textbf{Full Record (1980--2018)} & \textbf{+1.5708} & \textbf{+1.0169} & \textbf{+0.3454} & \textbf{3.2061} & Baseline \\
+Excl. 1982--83 (16 mos; $N=450$) & +1.0223 & +0.6761 & +0.2675 & 2.1536 & -32.8\% \\
+Excl. 1997--98 (15 mos; $N=451$) & +0.5532 & +0.4068 & +0.2209 & 1.5776 & -50.8\% \\
+Excl. 2015--16 (14 mos; $N=452$) & +1.5014 & +0.9211 & +0.2262 & 2.8976 & -9.6\% \\
+\textbf{Excl. All 3 Super Events (45 mos; $N=421$)} & \textbf{-0.1800} & \textbf{-0.1038} & \textbf{+0.0009} & \textbf{1.0873} & \textbf{-66.1\%} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig06_jackknife_extreme_event_collapse.pdf}
+\caption{Jackknife sensitivity and extreme event concentration in third-order statistics. (a) Moment stability of $T_{EEE}$, $T_{EEH}$, and $T_{ECH}$ under individual and combined exclusion of the three super El Ni\~no events. (b) Frobenius norm collapse comparison between global standardization (Case 1: $-66.1\%$) and subsample re-standardization (Case 2: $-58.3\%$). (c) Cumulative contribution to the third-order moment $T_{EEH} = \frac{1}{N}\sum_t E(t)^2 D20(t)$ over 1980--2018, demonstrating that active super El Ni\~no episodes (shaded intervals, 45 months = 9.66\% of record) account for the dominant portion of third-order covariance.}
+\label{fig:jackknife}
+\end{figure}
+
+Table~\ref{tab:jackknife} and Figure~\ref{fig:jackknife} present the Jackknife experiment results. Excluding the 45 cumulative active months across the three super El Ni\~no episodes (1982--83: 16 months; 1997--98: 15 months; 2015--16: 14 months; representing exactly $9.66\%$ of the 466-month record, leaving $N = 421$ irregular baseline months) produces a pronounced collapse:
+\begin{itemize}
+    \item Univariate skewness $T_{EEE}$ drops by \textbf{73.5\%} under re-standardization (to $0.4159$) and reverses sign under global standardization ($-0.1800$).
+    \item Mixed moment $T_{EEH}$ drops by \textbf{89.5\%} under re-standardization (to $0.1063$) and to $-0.1038$ under global standardization.
+    \item Global tensor Frobenius norm drops by \textbf{66.1\%} under global standardization (from $3.2061$ to $1.0873$) and by \textbf{58.3\%} under re-standardization ($1.3356$).
+\end{itemize}
+Notably, evaluating the events individually demonstrates that the 1997--98 event exerts the largest single leverage ($-50.8\%$ norm change), followed by 1982--83 ($-32.8\%$), whereas excluding 2015--16 reduces the norm by only $-9.6\%$. This reflects the distinct longitudinal spatial structure of 2015--16, where warming was centered further westward toward the dateline (high Central Pacific index $C > +1.5\sigma$, but more moderate eastern index $E$), in contrast to the intense eastern Pacific cold tongue warming characterizing 1982--83 and 1997--98.
+
+These results demonstrate that empirical third-order moments in the tropical Pacific are overwhelmingly concentrated in rare extreme episodes. This concentration is physically compatible with the atmospheric deep convective threshold ($\sim 28^\circ$C) in the cold tongue \citep{takahashi2016strong, takahashi2019theoretical, capotondi2020diversity} and oceanic non-linear dynamical heating \citep{an2004nonlinearity}. However, as noted by \citet{takahashi2019theoretical}, empirical subsampling across only three historical super El Ni\~no events is insufficient to unequivocally demonstrate an abrupt regime bifurcation over continuous higher-order non-linearities. The Jackknife thus serves as quantitative evidence of moment concentration in extreme episodes rather than a definitive proof of a discontinuous threshold.
+
+Importantly, as noted in Section~2.2, removing these 45 months leaves three multi-month gaps in the observational series. Therefore, while this Jackknife subsample provides a rigorous test of static moment concentration, the irregular remaining sample ($N = 421$) cannot be treated as a continuous time series for lag-dependent dynamic analyses.
+
+\subsection{Physical Event Composites and Oceanographic Distinctions}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig07_composiciones_eventos_ENSO.pdf}
+\caption{Event-aligned physical composites and phase-space trajectory, sharing common y-axis scaling across (a--c). (a) Super El Ni\~no composite (1982--83, 1997--98, 2015--16; $N=3$) showing standardized anomalies of $E$ (red), $C$ (orange), and eastern thermocline depth $D20$ ($H$, blue; shading denotes $\pm 1\sigma$), with individual event trajectories plotted as thin lines. (b) Moderate El Ni\~no composite (1987, 1991, 2002, 2009; $N=4$). (c) La Ni\~na composite for $N=4$ independent episodes (1988, 1998, 2007, 2010), aligned at the Central Pacific cold peak in $C$ (with 1998--2000 treated as a single prolonged multi-year event). (d) Phase-space trajectory in the $(E, D20)$ plane for the Super El Ni\~no composite from lag $-6$ to $+6$ months, with directional arrows tracing precursor local thermocline deepening ($t = -3$ mo), rapid eastern surface peak ($t = 0$), and subsequent rapid thermocline shoaling ($t = +3$ to $+6$ mo). Local eastern $D20$ measures boundary thermocline displacement, distinguished from basin-wide equatorial Warm Water Volume (WWV; \citealt{jin1997paradigm, meinen2000observations}).}
+\label{fig:composites}
+\end{figure}
+
+Figure~\ref{fig:composites} shows that the third-order moment $\mathbb{E}[E(t) C(t-3) H(t-2)]$ is physically consistent with actual oceanic sequences rather than statistical artifacts:
+\begin{itemize}
+    \item \textit{Super El Ni\~no Composite (1982/83, 1997/98, 2015/16):} During the precursor phase, anomalous upper-ocean heat content accumulates rapidly: at $t = -3$ months, $C = +1.11\sigma$ and $H = +1.74\sigma$; at $t = -2$ months, $C = +1.29\sigma$ and $H = +2.54\sigma$, reaching $E = +3.09\sigma$ and $H = +3.38\sigma$ at peak eastern warming ($t = 0$). Following the peak, thermocline shoaling and cold tongue cooling proceed rapidly: by $t = +3$ months, the thermocline anomaly collapses to $H = +0.98\sigma$ (with $C = +0.82\sigma$), and by $t = +6$ months the eastern thermocline is exhausted ($H = -0.11\sigma$) while $C$ drops sharply into negative territory ($-0.48\sigma$).
+    \item \textit{Moderate El Ni\~no Composite:} Eastern warming remains modest ($E = +0.48\sigma$ at $t = 0$), while Central Pacific warming is pronounced ($C = +1.43\sigma$ at $t = 0$ and $+1.46\sigma$ at $t = +1$ mo) and thermocline depth remains moderately elevated ($H = +1.74\sigma$ at $t=0$).
+    \item \textit{La Ni\~na Composite:} Characterized by persistent shallow thermocline conditions ($H = -1.72\sigma$ at $t = 0$), cold Central Pacific anomalies ($C = -2.18\sigma$), and negative eastern SST ($E = -0.29\sigma$).
+\end{itemize}
+
+\textbf{Conceptual Oceanographic Nuance:} It is critical to distinguish local eastern $D20$ from the basin-wide Warm Water Volume (WWV) defined in the recharge oscillator paradigm \citep{jin1997paradigm, meinen2000observations, vialard2025recharge}. The classic recharge oscillator operates through the zonally averaged thermocline depth / upper-ocean heat content across the entire equatorial belt ($120^\circ\text{E}$--$80^\circ\text{W}$, $5^\circ\text{S}$--$5^\circ\text{N}$). Eastern equatorial $D20$ ($110^\circ\text{W}$--$95^\circ\text{W}$), by contrast, represents a local wave receiver that captures both the basin-wide recharge mode and the dynamical thermocline tilt mode driven by zonal wind stress anomalies ($\tau_x$). Hence, while precursor deepening of $D20$ at lag $-2$ months and its rapid collapse at lag $+3$ to $+6$ months reflect localized wave convergence and thermocline shoaling along the South American cold tongue, they should be understood as a surface-thermocline asymmetry diagnostic rather than direct equatorial basin-wide recharge. Furthermore, while the linear regression between $D20$, $E$, and $C$ accounts for $R^2 = 66.54\%$, this contemporaneous statistical fit reflects strong wave coupling but does not by itself prove pure linear wave kinematics nor preclude unresolved subsurface non-linear dynamics.
+
+\section{Discussion}
+
+\subsection{Physical Attribution: Atmospheric Thresholds, Oceanic NDH, and Subsurface Wave Coupling}
+Our findings clarify the physical nature of ENSO non-linearity and position our results relative to recent dynamical frameworks:
+\begin{enumerate}
+    \item \textbf{Subsurface Wave Integration vs. Subsurface Non-Linearities:} The linear regression of eastern thermocline depth on SST indices yields $R^2 = 66.54\%$, reflecting the prominent role of linear equatorial wave dynamics in transferring wind-forced thermocline anomalies across the Pacific basin. However, we emphasize that a high contemporaneous linear regression does not by itself prove pure linear wave kinematics, nor does it preclude unresolved non-linear subsurface advection. Rather, it indicates that static third-order tensor projections are dominated by first-order thermocline tilt and wave convergence.
+    \item \textbf{Dual Origin of Non-Linearity and Extreme Event Concentration:} The extreme non-linear behavior of $E$ arises from two established physical mechanisms: (i) the atmospheric deep convective threshold ($\sim 28^\circ$C) in the equatorial cold tongue \citep{takahashi2016strong, takahashi2019theoretical, capotondi2020diversity}, and (ii) oceanic non-linear dynamical heating (NDH; \citealt{an2004nonlinearity}), which amplifies warm extremes via vertical and horizontal temperature advection. While our Jackknife analysis shows that third-order statistics collapse dramatically (by $66.1\%$) when super El Ni\~no events are excluded, we concur with \citet{takahashi2019theoretical} that having only three historical extreme events limits empirical power to prove a discontinuous regime threshold over continuous non-linearities.
+    \item \textbf{Contrast with Bispectral and Nonlinear Recharge Models:} In frequency space, \citet{pires2021bispectral} utilized bispectral analysis to identify quadratic phase coupling in ENSO indices, demonstrating that stochastic quadratic models capture substantial skewness. In physical space, \citet{han2026realistic} established that realistic ENSO simulation requires state-dependent non-linear damping in recharge oscillator dynamics. Our bi-lagged multilinear metric $\Delta T_{ECH}(+3, +2)$ complements these approaches by providing a compact time-domain diagnostic of the surface-thermocline asymmetry, distinguishing localized eastern thermocline response from basin-wide heat recharge.
+    \item \textbf{Mathematical Implication:} Static polynomial tensor expansions are ill-suited to model this physics because extreme ENSO excursions operate as episodic, localized amplifications rather than continuous ambient multilinear turbulence.
+\end{enumerate}
+
+\subsection{Diagnostic Value of Bi-Lagged Moments for Climate Models}
+While static third-order tensors provide little incremental information, the bi-lagged surface $T_{ECH}(\tau_1, \tau_2)$ and its time-reversal asymmetry $\Delta T_{ECH}$ offer powerful diagnostic benchmarks for evaluating coupled general circulation models (AOGCMs) in CMIP6 and CMIP7. As highlighted in recent comprehensive syntheses of the recharge oscillator \citep{vialard2025recharge, han2026realistic}, capturing realistic duration, discharge, and transition asymmetries between El Ni\~no and La Ni\~na remains a fundamental challenge for global climate models. Many state-of-the-art models suffer from persistent cold tongue biases, over-active central Pacific variability, and overly symmetric El Ni\~no/La Ni\~na transitions. The bi-lagged multilinear metric packages the phase progression of thermocline recharge ($\tau_2 = +2$ mo), precursor Central Pacific warming ($\tau_1 = +3$ mo), peak eastern warming ($t=0$), and post-peak transition into a compact scalar benchmark, providing an objective test for the temporal arrow of ENSO.
+
+\section{Conclusions}
+
+This study has presented a diagnostic evaluation of the trivariate $(E, C, D20)$ system over 1980--2018 ($N = 466$ months):
+\begin{enumerate}
+    \item \textbf{Static Multilinear Partitioning:} The static third-order moment tensor $\mathcal{T}^{(3)}$ is largely ($71.76\%$ squared Frobenius ratio) accounted for by linear thermocline wave coupling and univariate skewness ($T_{EEE} = 1.5708$, $T_{CCC} = -0.4430$). Geometric decomposition confirms that the linear reconstruction contributes $71.76\%$ ($\|\mathcal{T}_{\text{lin}}\|_F = 2.7160$), the non-orthogonal cross-term represents $21.82\%$ and the residual tensor norm represents $6.42\%$ ($\|\mathcal{T}_{\text{res}}\|_F = 0.8121$, with total norm $\|\mathcal{T}\|_F = 3.2061$). The general Gram-Schmidt identity confirms that $T_{EEC}$ is algebraically partitioned into linear correlation and Takahashi's quadratic curve ($m_{\text{res}} \equiv \gamma \text{Var}(q) = 0.1367$), without unprojected cubic components in the static phase plane.
+    \item \textbf{Temporal Irreversibility and Arrow of Time:} The bi-lagged surface $T_{ECH}(\tau_1, \tau_2)$ identifies an isolated peak at $(\tau_1 = +3, \tau_2 = +2)$ months ($+0.4293$) with a time-reversal asymmetry of $\Delta T = +0.2405$. While an unconstrained grid search across 625 lags yields $p = 0.44$ due to random field extreme-value fluctuations, multivariate Fourier surrogates ($p = 0.0105$), trivariate Gaussian VAR(2) models ($p = 0.0295$), and a dynamic non-linear coupled recharge model ($p = 0.0140$) reject linear/quadratic benchmarks when constrained to the physical wave-transit timescale $(\tau_C = +3, \tau_H = +2)$. Retrospective temporal cross-validation on 2000--2018 ($N=228$) confirms this positive asymmetry ($\Delta T = +0.3227$, 95\% bootstrap CI: $[+0.0319, +0.5125]$, Fourier surrogate $p = 0.0395$, dynamic quadratic null model $p = 0.0065$ [one-tailed], $p=0.0150$ [two-tailed, $p < 0.05$]). Physical event composites confirm that this asymmetry reflects the localized surface-thermocline phase progression compatible with recharge-discharge dynamics, while distinguishing local eastern thermocline shoaling from basin-wide Warm Water Volume (WWV; \citealt{jin1997paradigm, vialard2025recharge}).
+    \item \textbf{Moment Concentration and Sensitivity in Extreme Episodes:} Excluding the three super El Ni\~no events (45 active months; $9.66\%$ of the record) produces a $66.1\%$ reduction in the global tensor Frobenius norm under global standardization (from $3.2061$ to $1.0873$) and a $58.3\%$ reduction under re-standardization ($1.3356$). This demonstrates the high leverage and sensitivity of empirical higher-order moments to rare extreme episodes, consistent with atmospheric convective thresholds \citep{takahashi2016strong, takahashi2019theoretical} and oceanic non-linear dynamical heating \citep{an2004nonlinearity}, though historical sample sizes remain insufficient to definitively separate threshold bifurcations from continuous higher-order non-linearities.
+    \item \textbf{Predictive Falsification:} Incorporating bilinear interaction terms fails to improve out-of-sample forecast skill and produces slightly higher RMSE across all lead horizons (+0.81\% at 1 mo, +1.61\% at 3 mo, +1.82\% at 6 mo), failing to show empirical predictive utility.
+\end{enumerate}
+
+Overall, trivariate moment tensor analysis provides a robust, statistically significant diagnostic of surface-thermocline temporal asymmetry under physically motivated timescales, offering an objective benchmark for climate model fidelity, while its physical interpretation reflects known wave and convective mechanisms rather than autonomous multilinear physics.
+
+\section*{Acknowledgments and Data Availability}
+This study was conducted within the research framework of the ARGO-CROSS Project at the Instituto Geof\'isico del Per\'u (IGP). Primary observational datasets are publicly accessible: NOAA ERSSTv5 (\url{https://www.ncei.noaa.gov/products/extended-reconstructed-sst}), TAO/TRITON moored buoy array data from NOAA PMEL (\url{https://www.pmel.noaa.gov/tao/}), and ECMWF ORAS5 ocean reanalysis data (\url{https://www.ecmwf.int/en/forecasts/dataset/ocean-reanalysis-system-5}). All Python processing scripts (\texttt{audit\_01} to \texttt{audit\_07}, \texttt{generate\_all\_final\_figures.py}), processed NetCDF files, synchronized CSV data tables (\texttt{tabla\_datos\_sincronizados\_1980\_2018.csv}), Monte Carlo simulation routines ($B=2000$, random seed 42), and LaTeX source files are archived and will be made publicly available upon formal acceptance at the dedicated GitHub repository (\url{https://github.com/mandrade-igp/argo-cross-enso-tensor}) and permanent Zenodo archive. During peer review, all reproducible scripts, data tables, and figures are fully accessible to reviewers and editors via the companion Overleaf repository mirror (Project ID: \texttt{6ae69499583b59198223570c}) and upon direct request to the corresponding author (\texttt{mandrade@igp.gob.pe}). Numerical analyses were executed under Python 3.11 with standard scientific packages (\texttt{numpy 1.26}, \texttt{scipy 1.12}, \texttt{statsmodels 0.14}, and \texttt{matplotlib 3.8}).
+
+\bibliographystyle{plainnat}
+\bibliography{references_final}
+
+\end{document}

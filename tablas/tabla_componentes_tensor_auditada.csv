@@ -1,0 +1,11 @@
+Componente,Multiplicidad,Observado_ddof1,Proyeccion_Lineal,Residual,Fraccion_Lineal,Descripcion
+T_EEE,1,+1.5708,+1.5708,+0.0000,100.0%,Asimetría marginal E
+T_CCC,1,-0.4430,-0.4430,+0.0000,100.0%,Asimetría marginal C
+T_HHH,1,+0.8682,+0.3295,+0.5386,38.0%,Asimetría marginal D20
+T_EEC,3,+0.2478,+0.2478,+0.0000,100.0%,Momento cruzado E²·C
+T_ECC,3,+0.2369,+0.2369,+0.0000,100.0%,Momento cruzado E·C²
+T_EEH,3,+1.0169,+0.9275,+0.0894,91.2%,Momento cruzado E²·D20
+T_EHH,3,+0.9188,+0.6227,+0.2962,67.8%,Momento cruzado E·D20²
+T_CCH,3,-0.1649,-0.1559,-0.0090,94.5%,Momento cruzado C²·D20
+T_CHH,3,+0.1603,+0.0363,+0.1240,22.7%,Momento cruzado C·D20²
+T_ECH,6,+0.3454,+0.2681,+0.0773,77.6%,Interacción tripartita E·C·D20

@@ -1,0 +1,6 @@
+Modelo_Nulo,Hipotesis_Nula,Estadistico,Media_Nula,P95_Nulo,P_Valor,Interpretacion
+Sustitutas Fourier Multivariadas,Proceso Gaussiano Estacionario Lineal,"Delta T(+3, +2)",+0.0010 +/- 0.0524,0.0835,0.0000,Rechaza Gaussianidad Lineal (p < 0.05)
+VAR(2) Trivariado Gaussiano,Dinámica Lineal Markoviana de Recarga,"Delta T(+3, +2)",-0.0026 +/- 0.1094,0.1744,0.0110,Rechaza Oscilador Lineal (p < 0.05)
+Cuadrático Desacoplado (Takahashi),Recarga Lineal + Parábola C~E²,"Delta T(+3, +2)",-0.0112 +/- 0.0642,0.0912,0.0000,Rechaza No-Linealidad Estática (p < 0.01)
+Dinámico No Lineal Acoplado (Fijo),Recarga No Lineal con Memoria en C,"Delta T(+3, +2)",+0.0394 +/- 0.0929,0.1867,0.0140,Rechaza Dinámica Cuadrática a Escala Física (p < 0.05)
+Dinámico No Lineal Acoplado (Libre),Búsqueda Exploratoria Ciega en 625 Lags,max Delta T_sel,+0.2281 +/- 0.1120,0.4203,0.4360,NO Significativo sin Restricción Física Previa (p = 0.44)
